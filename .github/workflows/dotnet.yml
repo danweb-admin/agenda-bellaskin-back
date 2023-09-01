@@ -27,9 +27,9 @@ jobs:
     - name: build image and push to docker hub
       uses: docker/build-push-action@v1.1.0
       with:
-        username: williambr2022
+        username: danwebsoftwares
         password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: williambr2022/solucao-api
+        repository: danwebsoftwares/bella-skin-api
         tags: ${{ github.sha }}, latest
   
   deploy:
@@ -46,7 +46,7 @@ jobs:
       - name: update k8s
         run: |
           cd Kubernetes
-          kustomize edit set image solucao-api=williambr2022/solucao-api:${{ github.sha }}
+          kustomize edit set image bella-skin-api=danwebsoftwares/bella-skin-api:${{ github.sha }}
           cat kustomization.yaml
       - name: commit
         run: |
