@@ -31,11 +31,8 @@
       "applicationUrl": "https://localhost:8091;http://localhost:8080",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DbServer": "44.206.38.149",
-        "DbPort": "32593",
-        "DbUser": "SA",
-        "Database": "DemoAgenDanWeb",
-        "Password": "S0luc@o2022"
+  
+
       }
     },
     "Docker": {

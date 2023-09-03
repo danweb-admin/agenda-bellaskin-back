@@ -12,11 +12,13 @@ namespace Solucao.Application.Service.Implementations
     {
         public string GenerateToken(UserViewModel user)
         {
+            var keyConfiguration = Environment.GetEnvironmentVariable("KeyMD5");
+
             if (user == null)
                 return null;
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("c29sdWNhby1sYXNlcg==");
+            var key = Encoding.ASCII.GetBytes(keyConfiguration);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]

@@ -48,7 +48,7 @@ namespace Solucao.API.Controllers
         }
 
         [HttpPost("user")]
-        [Authorize]
+        [AllowAnonymous]
         [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ValidationResult))]
         [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
         [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]

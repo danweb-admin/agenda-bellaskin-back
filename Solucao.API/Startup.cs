@@ -47,7 +47,8 @@ namespace Solucao.API
             // Auto Mapper
             services.AddAutoMapperConfiguration();
 
-            var key = Encoding.ASCII.GetBytes("c29sdWNhby1sYXNlcg==");
+            var configurationKey = Environment.GetEnvironmentVariable("KeyMD5");
+            var key = Encoding.ASCII.GetBytes(configurationKey);
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

@@ -1,19 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment # Kubernetes resource kind we are creating
 metadata:
-  name: solucao-api
+  name: bella-skin-api
+  namespace: bella-skin
 spec:
   selector:
     matchLabels:
-      app: solucao-api
+      app: bella-skin-api
   template:
     metadata:
       labels:
-        app: solucao-api
+        app: bella-skin-api
     spec:
       containers:
-        - name: solucao-api
-          image: solucao-api
+        - name: bella-skin-api
+          image: danwebsoftwares/bella-skin-api:latest
           ports:
             - containerPort: 80
           imagePullPolicy: Always
@@ -38,8 +39,13 @@ spec:
                 configMapKeyRef:
                   name: configuration
                   key: db_server
+            - name: KeyMD5
+              valueFrom:
+                configMapKeyRef:
+                  name: configuration
+                  key: key_md5
             - name: Password
               valueFrom:
                 secretKeyRef:
-                  name: my-secret
+                  name: secret
                   key: password
