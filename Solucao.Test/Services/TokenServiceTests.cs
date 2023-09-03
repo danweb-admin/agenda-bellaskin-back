@@ -17,6 +17,8 @@ namespace Solucao.Tests
         {
             // Arrange
             var tokenService = new TokenService();
+            Environment.SetEnvironmentVariable("KeyMD5", "mNjTWFuQGczckAyMDI");
+            var keyMd5 = Environment.GetEnvironmentVariable("KeyMD5");
             var user = new UserViewModel { Name = "John Doe" };
 
             // Act
@@ -27,7 +29,7 @@ namespace Solucao.Tests
 
             // Parse the token to ensure it's a valid token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("c29sdWNhby1sYXNlcg==");
+            var key = Encoding.ASCII.GetBytes("mNjTWFuQGczckAyMDI");
             var validationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
