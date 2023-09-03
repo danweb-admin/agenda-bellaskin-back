@@ -29,7 +29,7 @@ namespace Solucao.Tests
 
             // Parse the token to ensure it's a valid token
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("mNjTWFuQGczckAyMDI");
+            var key = Encoding.ASCII.GetBytes(keyMd5);
             var validationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
