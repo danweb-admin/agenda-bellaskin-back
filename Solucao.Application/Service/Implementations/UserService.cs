@@ -53,6 +53,7 @@ namespace Solucao.Application.Service.Implementations
         public async Task<UserViewModel> Authenticate(string email, string password)
         {
             var user = await userRepository.GetByEmail(email);
+            var s = await userRepository.GetAll();
 
             if (user != null)
             {

@@ -247,16 +247,23 @@ namespace Solucao.Application.Service.Implementations
             return list;
         }
 
-        public async Task<ValidationResult> UpdateDriverOrTechniqueCalendar(Guid id, Guid personId, bool isDriver)
+        public async Task<ValidationResult> UpdateDriverOrTechniqueCalendar(Guid id, Guid personId, bool isDriver, bool isCollect)
         {
             try
             {
                 var calendar = await calendarRepository.GetById(id);
 
                 if (isDriver)
-                    calendar.DriverId = personId;
+                {
+                    if (isCollect)
+                        calendar.DriverCollectsId = personId;
+                    else
+                        calendar.DriverId = personId;
+                }
                 else
+                {
                     calendar.TechniqueId = personId;
+                }
 
                 await calendarRepository.Update(calendar);
 

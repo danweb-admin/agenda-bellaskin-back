@@ -5,7 +5,7 @@ namespace Solucao.Application.Contracts.Requests
 {
     public class CalendarRequest
     {
-        
+
 
         public DateTime Date { get; set; }
         public DateTime StartDate { get; set; }
@@ -15,7 +15,7 @@ namespace Solucao.Application.Contracts.Requests
         public Guid? CalendarId { get; set; }
         public Guid? PersonId { get; set; }
         public Guid? TechniqueId { get; set; }
-        public Guid? DriverId { get; set; } 
+        public Guid? DriverId { get; set; }
         public string EquipamentList { get; set; }
         public string SpecificationList { get; set; }
         public string DriverList { get; set; }
@@ -25,5 +25,6 @@ namespace Solucao.Application.Contracts.Requests
         public string TravelOn { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
+        public bool isCollect { get; set; }
     }
 }

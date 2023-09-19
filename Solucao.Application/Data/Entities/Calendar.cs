@@ -23,6 +23,7 @@ namespace Solucao.Application.Data.Entities
         public DateTime? StartTime { get; set; }
         public DateTime? EndTime { get; set; }
         public Guid? DriverId { get; set; }
+        public Guid? DriverCollectsId { get; set; }
         public Guid? TechniqueId { get; set; }
         public Guid UserId { get; set; }
         public int TravelOn { get; set; }
@@ -30,6 +31,7 @@ namespace Solucao.Application.Data.Entities
         public User User { get; set; }
         public Person Technique { get; set; }
         public Person Driver { get; set; }
+        public Person DriverCollects { get; set; }
         public Client Client { get; set; }
         public Equipament Equipament { get; set; }
         public IList<CalendarSpecifications> CalendarSpecifications { get; set; }

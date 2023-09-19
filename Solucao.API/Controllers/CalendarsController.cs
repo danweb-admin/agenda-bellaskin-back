@@ -142,7 +142,7 @@ namespace Solucao.API.Controllers
         public async Task<IActionResult> UpdateDriverOrTechniqueCalendarAsync([FromBody] CalendarRequest model)
         {
             ValidationResult result;
-            result = await calendarService.UpdateDriverOrTechniqueCalendar(model.CalendarId.Value, model.PersonId.Value, model.IsDriver);
+            result = await calendarService.UpdateDriverOrTechniqueCalendar(model.CalendarId.Value, model.PersonId.Value, model.IsDriver, model.isCollect);
 
             if (result != null)
                 return NotFound(result);

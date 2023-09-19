@@ -25,6 +25,7 @@ namespace Solucao.Application.Contracts
         public string StartTime1 { get; set; }
         public string EndTime1 { get; set; }
         public Guid? DriverId { get; set; }
+        public Guid? DriverCollectsId { get; set; }
         public Guid? TechniqueId { get; set; }
         public Guid? UserId { get; set; }
         public Guid? ParentId { get; set; }
@@ -33,6 +34,7 @@ namespace Solucao.Application.Contracts
         public User User { get; set; }
         public Person Technique { get; set; }
         public Person Driver { get; set; }
+        public Person DriverCollects { get; set; }
         public Client Client { get; set; }
         public Equipament Equipament { get; set; }
         public IList<CalendarSpecifications> CalendarSpecifications { get; set; }

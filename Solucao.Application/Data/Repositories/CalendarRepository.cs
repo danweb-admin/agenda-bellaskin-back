@@ -32,6 +32,7 @@ namespace Solucao.Application.Data.Repositories
                                          .Include(x => x.Client.City)
                                          .Include(x => x.Client)
                                          .Include(x => x.Driver)
+                                         .Include(x => x.DriverCollects)
                                          .Include(x => x.Technique)
                                          .Include(x => x.User)
                                          .Include(x => x.CalendarSpecifications)

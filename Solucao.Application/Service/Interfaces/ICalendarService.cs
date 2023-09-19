@@ -16,7 +16,7 @@ namespace Solucao.Application.Service.Interfaces
         Task<IEnumerable<CalendarViewModel>> GetAll(DateTime date);
         Task<IEnumerable<EquipamentList>> GetAllByDate(DateTime date);
         Task<CalendarViewModel> GetById(Guid id);
-        Task<ValidationResult> UpdateDriverOrTechniqueCalendar(Guid id, Guid personId, bool isDriver);
+        Task<ValidationResult> UpdateDriverOrTechniqueCalendar(Guid id, Guid personId, bool isDriver, bool isCollect);
         Task<ValidationResult> UpdateStatusOrTravelOnCalendar(Guid id, string status, string travelOn, bool isTravelOn);
         Task<ValidationResult> UpdateContractMade(Guid id);
         Task<ValidationResult> ValidateLease(DateTime date, Guid clientId, Guid equipamentId, IList<CalendarSpecifications> specifications ,string startTime, string endTime);
