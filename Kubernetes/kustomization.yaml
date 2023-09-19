@@ -9,7 +9,7 @@ namespace: solucao-laser
 images:
 - name: bella-skin-api
   newName: danwebsoftwares/bella-skin-api
-  newTag: ae79fec80ae0d41084b5bf72b08db15512c17684
+  newTag: 1f16eb761029293a767b997cf3ef0d4b13063c0e
 - name: solucao-api
   newName: williambr2022/solucao-api
   newTag: e13ef9f9bd79a318b30ae21a800c9c4bc3758391
