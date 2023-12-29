@@ -7,6 +7,6 @@ resources:
 namespace: bella-skin
 
 images:
-- name: bella-skin-back
+- name: williambr2022/bella-skin-back
   newName: williambr2022/bella-skin-back
-  newTag: 1f16eb761029293a767b997cf3ef0d4b13063c0e
+  newTag: e13ef9f9bd79a318b30ae21a800c9c4bc3758391
