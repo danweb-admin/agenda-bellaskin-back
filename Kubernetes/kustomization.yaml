@@ -9,4 +9,4 @@ namespace: bella-skin
 images:
 - name: williambr2022/bella-skin-back
   newName: williambr2022/bella-skin-back
-  newTag: e13ef9f9bd79a318b30ae21a800c9c4bc3758391
+  newTag: 19444b75e02acc1adbbc0f60f616576f3ea2c437
