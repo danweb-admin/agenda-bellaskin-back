@@ -1,9 +1,7 @@
-name: CD production
+name: CD
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -27,9 +25,9 @@ jobs:
     - name: build image and push to docker hub
       uses: docker/build-push-action@v1.1.0
       with:
-        username: danwebsoftwares
+        username: williambr2022
         password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: danwebsoftwares/bella-skin-api
+        repository: williambr2022/bella-skin-back
         tags: ${{ github.sha }}, latest
   
   deploy:
@@ -46,7 +44,7 @@ jobs:
       - name: update k8s
         run: |
           cd Kubernetes
-          kustomize edit set image bella-skin-api=danwebsoftwares/bella-skin-api:${{ github.sha }}
+          kustomize edit set image williambr2022/bella-skin-back=williambr2022/bella-skin-back:${{ github.sha }}
           cat kustomization.yaml
       - name: commit
         run: |
@@ -57,5 +55,5 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           force: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.TOKEN_GITHUB }}
           branch: ${{ github.ref }}

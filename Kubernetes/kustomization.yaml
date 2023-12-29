@@ -1,15 +1,12 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- solucao-api.dep.yaml
-- solucao-api.svc.yaml
+- bella-skin-back.dep.yaml
+- bella-skin-back.svc.yaml
 
-namespace: solucao-laser
+namespace: bella-skin
 
 images:
-- name: bella-skin-api
-  newName: danwebsoftwares/bella-skin-api
+- name: bella-skin-back
+  newName: williambr2022/bella-skin-back
   newTag: 1f16eb761029293a767b997cf3ef0d4b13063c0e
-- name: solucao-api
-  newName: williambr2022/solucao-api
-  newTag: e13ef9f9bd79a318b30ae21a800c9c4bc3758391

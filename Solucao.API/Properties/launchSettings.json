@@ -15,13 +15,6 @@
       "launchUrl": "swagger",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "DbServer": "44.206.38.149",
-        "DbPort": "32593",
-        "DbUser": "SA",
-        "Database": "DemoAgenDanWeb",
-        "Password": "S0luc@o2022",
-        "Development": "False",
-        "LogPath": "C:\\Users\\Willism\\Documents"
       }
     },
     "Solucao.API": {
