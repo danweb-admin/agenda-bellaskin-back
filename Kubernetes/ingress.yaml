@@ -19,6 +19,6 @@ spec:
         path: "/"
         backend:
           service:
-            name: bella-skin-service
+            name: bella-skin-back-svc
             port: 
               number: 80
