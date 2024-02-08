@@ -53,10 +53,16 @@ namespace Solucao.API.Controllers
         {
             logger.LogInformation($"{nameof(CalendarsController)} -{nameof(SchedulesAsync)} | Inicio da chamada");
             var list = new List<Guid>();
+            var equipamentIds = new List<Guid>();
+
             if (!string.IsNullOrEmpty(model.DriverList))
              list = model.DriverList.Split(',').Select(Guid.Parse).ToList();
 
-            return await calendarService.Schedules(model.StartDate, model.EndDate, model.ClientId, model.EquipamentId, list, model.TechniqueId, model.Status);
+            if (!string.IsNullOrEmpty(model.EquipamentList))
+                equipamentIds = model.EquipamentList.Split(',').Select(Guid.Parse).ToList();
+
+
+            return await calendarService.Schedules(model.StartDate, model.EndDate, model.ClientId, equipamentIds, list, model.TechniqueId, model.Status);
         }
 
         [HttpGet("calendar/availability")]

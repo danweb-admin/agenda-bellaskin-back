@@ -45,40 +45,30 @@ namespace Solucao.Application.Service.Implementations
 
         public async Task<ValidationResult> UpdateResolved(Guid stickyNotesId)
         {
-            try
-            {
-                var stickyNote = await stickyNoteRepository.GetById(stickyNotesId);
-                if (stickyNote == null)
-                    return new ValidationResult("Anotação não encontrada");
+            
+            var stickyNote = await stickyNoteRepository.GetById(stickyNotesId);
+            if (stickyNote == null)
+                return new ValidationResult("Anotação não encontrada");
 
-                stickyNote.Resolved = !stickyNote.Resolved;
-                await stickyNoteRepository.Update(stickyNote);
+            stickyNote.Resolved = !stickyNote.Resolved;
+            await stickyNoteRepository.Update(stickyNote);
 
-                return ValidationResult.Success;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return ValidationResult.Success;
+            
         }
 
         public async Task<ValidationResult> Remove(Guid stickyNotesId)
         {
-            try
-            {
-                var stickyNote = await stickyNoteRepository.GetById(stickyNotesId);
-                if (stickyNote == null)
-                    return new ValidationResult("Anotação não encontrada");
+            
+            var stickyNote = await stickyNoteRepository.GetById(stickyNotesId);
+            if (stickyNote == null)
+                return new ValidationResult("Anotação não encontrada");
 
-                stickyNote.Active = false;
-                await stickyNoteRepository.Update(stickyNote);
+            stickyNote.Active = false;
+            await stickyNoteRepository.Update(stickyNote);
 
-                return ValidationResult.Success;
-            }
-            catch (Exception)
-            {
-                throw;
-            }
+            return ValidationResult.Success;
+            
         }
     }
 }

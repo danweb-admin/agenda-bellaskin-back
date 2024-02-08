@@ -1,11 +1,15 @@
 using System;
+using System.IO;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -31,6 +35,13 @@ namespace Solucao.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddCors();
+
+            services.Configure<FormOptions>(o =>
+            {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
 
             services.AddControllers().AddNewtonsoftJson(options =>
                   options.SerializerSettings.ReferenceLoopHandling =
@@ -82,7 +93,6 @@ namespace Solucao.API
             else
                 connectionString = $"Server={server}, {port};Initial Catalog={database};User ID={user};Password={password}";
 
-            Console.WriteLine("************" + connectionString + "************");
             services.AddDbContext<SolucaoContext>(options =>
                 options.UseSqlServer(connectionString));
         }
@@ -92,12 +102,11 @@ namespace Solucao.API
         {
             DatabaseManagementService.MigrationInitialisation(app);
 
-            //if (env.IsDevelopment())
-            //{
+            
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Solucao.API v1"));
-            //}
+            
 
             /*INICIO DA CONFIGURAÇÃO - PROMETHEUS*/
             // Custom Metrics to count requests for each endpoint and the method

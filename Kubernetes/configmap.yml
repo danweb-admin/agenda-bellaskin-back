@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configuration
+  namespace: demo-danweb
+data:
+  db_user: "SA"
+  database: "DemoAgenDanWeb"
+  db_port: "1433"
+  db_server: "mssql-deploy.rcc-manager.svc.cluster.local"
+  key_md5: "QmVsbGFTa2luQDIwMjM="

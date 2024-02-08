@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using NetDevPack.Data;
 using Solucao.Application.Data.Entities;
+using Solucao.Application.Data.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Solucao.Application.Data.Repositories
 {
-    public class EquipamentRepository 
+    public class EquipamentRepository : IEquipamentRepository
     {
         public IUnitOfWork UnitOfWork => Db;
         protected readonly SolucaoContext Db;
@@ -22,19 +23,19 @@ namespace Solucao.Application.Data.Repositories
             DbSet = Db.Set<Equipament>();
         }
 
-        public async Task<IEnumerable<Equipament>> GetAll(bool ativo)
+        public virtual async Task<IEnumerable<Equipament>> GetAll(bool ativo)
         {
             return await Db.Equipaments.Include(x => x.EquipamentSpecifications).Where(x => x.Active == ativo).OrderBy(x => x.Order).ToListAsync();
         }
 
-        public async Task<IEnumerable<Equipament>> GetListById(List<Guid> guids)
+        public virtual async Task<IEnumerable<Equipament>> GetListById(List<Guid> guids)
         {
             return await Db.Equipaments.Include(x => x.EquipamentSpecifications)
                                         .ThenInclude(y => y.Specification)
                                         .Where(x => guids.Contains(x.Id)).OrderBy(x => x.Order).ToListAsync();
         }
 
-        public async Task<ValidationResult> Add(Equipament equipament)
+        public virtual async Task<ValidationResult> Add(Equipament equipament)
         {
             try
             {
@@ -49,7 +50,7 @@ namespace Solucao.Application.Data.Repositories
             }
         }
 
-        public async Task<ValidationResult> Update(Equipament equipament)
+        public virtual async Task<ValidationResult> Update(Equipament equipament)
         {
             try
             {

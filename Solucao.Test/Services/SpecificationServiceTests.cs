@@ -115,5 +115,27 @@ namespace Solucao.Tests
             // Assert
             Assert.Equal(2, result.Count());
         }
+
+        [Fact]
+        public async Task GetSpecification_ReturnsListOfSpecifications()
+        {
+            // Arrange
+            var equipamentIds = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() };
+            var specifications = new List<Specification>
+            {
+                new Specification { Id = Guid.NewGuid() },
+                new Specification { Id = Guid.NewGuid() }
+            };
+
+            specificationRepositoryMock.Setup(repo => repo.GetAll()).ReturnsAsync(specifications);
+
+            var specificationService = new SpecificationService(specificationRepositoryMock.Object, _mapper);
+
+            // Act
+            var result = await specificationService.GetAll();
+
+            // Assert
+            Assert.Equal(2, result.Count());
+        }
     }
 }

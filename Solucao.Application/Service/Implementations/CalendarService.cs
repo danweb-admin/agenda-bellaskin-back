@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Solucao.Application.Contracts;
 using Solucao.Application.Data.Entities;
+using Solucao.Application.Data.Interfaces;
 using Solucao.Application.Data.Repositories;
 using Solucao.Application.Service.Interfaces;
 using System;
@@ -15,11 +16,12 @@ namespace Solucao.Application.Service.Implementations
 {
     public class CalendarService : ICalendarService
     {
+
         private CalendarRepository calendarRepository;
-        private EquipamentRepository equipamentRepository;
+        private IEquipamentRepository equipamentRepository;
         private SpecificationRepository specificationRepository;
         private readonly IMapper mapper;
-        public CalendarService(CalendarRepository _calendarRepository, IMapper _mapper, SpecificationRepository _specificationRepository, EquipamentRepository _equipamentRepository)
+        public CalendarService(CalendarRepository _calendarRepository, IMapper _mapper, SpecificationRepository _specificationRepository, IEquipamentRepository _equipamentRepository)
         {
             calendarRepository = _calendarRepository;
             mapper = _mapper;
@@ -65,6 +67,7 @@ namespace Solucao.Application.Service.Implementations
 
         public async Task<ValidationResult> Update(CalendarViewModel calendar, Guid user)
         {
+            
             ValidationResult result;
             Guid parentId;
 
@@ -105,7 +108,7 @@ namespace Solucao.Application.Service.Implementations
 
                 if (!string.IsNullOrEmpty(calendar.StartTime1))
                 {
-                    var start = calendar.Date.ToString("yyyy-MM-dd") + " " + calendar.StartTime1.Replace(":","").Insert(2,":");
+                    var start = calendar.Date.ToString("yyyy-MM-dd") + " " + calendar.StartTime1.Replace(":", "").Insert(2, ":");
                     calendar.StartTime = DateTime.Parse(start);
                 }
 
@@ -117,14 +120,16 @@ namespace Solucao.Application.Service.Implementations
 
                 if (string.IsNullOrEmpty(calendar.Status))
                     calendar.Status = "pending";
-                
+
                 var _calendarAdd = mapper.Map<Calendar>(calendar);
 
                 return await calendarRepository.Add(_calendarAdd);
 
             }
 
-            return null;
+            return ValidationResult.Success;
+            
+            
         }
 
         public async Task<ValidationResult> ValidateLease(DateTime date, Guid clientId, Guid equipamentId, IList<CalendarSpecifications> specifications, string startTime, string endTime)
@@ -190,7 +195,7 @@ namespace Solucao.Application.Service.Implementations
             }
         }
 
-        public async Task<IEnumerable<CalendarViewModel>> Schedules(DateTime startDate, DateTime endDate, Guid? clientId, Guid? equipamentId, List<Guid> driverId, Guid? techniqueId, string status)
+        public async Task<IEnumerable<CalendarViewModel>> Schedules(DateTime startDate, DateTime endDate, Guid? clientId, List<Guid> equipamentId, List<Guid> driverId, Guid? techniqueId, string status)
         {
             return mapper.Map<IEnumerable<CalendarViewModel>>(await calendarRepository.Schedules(startDate, endDate, clientId, equipamentId, driverId,techniqueId, status));
         }
@@ -373,5 +378,7 @@ namespace Solucao.Application.Service.Implementations
 
             return null;
         }
+
+        
     }
 }

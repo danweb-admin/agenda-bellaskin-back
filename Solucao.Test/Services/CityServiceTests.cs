@@ -19,6 +19,7 @@ namespace Solucao.Tests
         private Mock<HttpMessageHandler> handlerMock;
         private Mock<IHttpClientFactory> mockHttpClientFactory;
         private Mock<HttpClient> httpClientMock;
+        
 
         public CityServiceTests()
         {

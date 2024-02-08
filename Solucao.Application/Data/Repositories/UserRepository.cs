@@ -23,23 +23,23 @@ namespace Solucao.Application.Data.Repositories
             logger = _logger;
         }
 
-        public async Task<IEnumerable<User>> GetAll()
+        public virtual async Task<IEnumerable<User>> GetAll()
         {
             return await Db.Users.ToListAsync();
         }
 
-        public async Task<User> GetById(Guid Id)
+        public virtual async Task<User> GetById(Guid Id)
         {
             return await Db.Users.FindAsync(Id);
         }
 
 
-        public async Task<User> GetByName(string name)
+        public virtual async Task<User> GetByName(string name)
         {
             return await Db.Users.FirstOrDefaultAsync(x => x.Name == name);
         }
 
-        public async Task<ValidationResult> Add(User user)
+        public virtual async Task<ValidationResult> Add(User user)
         {
             try
             {
@@ -55,7 +55,7 @@ namespace Solucao.Application.Data.Repositories
         }
 
         
-        public async Task<ValidationResult> Update(User user)
+        public virtual async Task<ValidationResult> Update(User user)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace Solucao.Application.Data.Repositories
             }
         }
 
-        public async Task<User> GetByEmail(string email)
+        public virtual async Task<User> GetByEmail(string email)
         {
             return await Db.Users.FirstOrDefaultAsync(x => x.Email == email && x.Active);
 

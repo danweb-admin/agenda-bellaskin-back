@@ -47,7 +47,6 @@ namespace Solucao.Application.Service.Implementations
             person.UpdatedAt = DateTime.Now;
             var _person = mapper.Map<Person>(person);
             
-
             return personRepository.Update(_person);
         }
 

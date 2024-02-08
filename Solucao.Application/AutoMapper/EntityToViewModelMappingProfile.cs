@@ -18,8 +18,29 @@ namespace Solucao.Application.AutoMapper
             CreateMap<Client, ClientViewModel>();
             CreateMap<Specification, SpecificationViewModel>();
             CreateMap<Equipament, EquipamentViewModel>();
-            CreateMap<Calendar, CalendarViewModel>();
+            CreateMap<Calendar, CalendarViewModel>()
+                .ForMember(dest => dest.ContractPath, opt => opt.ConvertUsing(new MarkDownConverter()))
+                .ForMember(dest => dest.Value, opt => opt.MapFrom(x => x.Value.ToString("n2").Replace(".",",")));
             CreateMap<StickyNote, StickyNoteViewModel>();
+            CreateMap<Model, ModelViewModel>();
+            CreateMap<ModelAttributes, ModelAttributeViewModel>();
+
+        }
+
+
+    }
+
+    public class MarkDownConverter : IValueConverter<string, string>
+    {
+        public string Convert(string sourceMember, ResolutionContext context)
+        {
+            
+            var split = sourceMember?.Split('/');
+            if (split == null || split.Length == 0)
+                return string.Empty;
+            var length = split.Length;
+
+            return split[length - 1];
         }
     }
 }

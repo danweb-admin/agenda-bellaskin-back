@@ -20,11 +20,11 @@ namespace Solucao.Application.Contracts.Requests
         public string SpecificationList { get; set; }
         public string DriverList { get; set; }
         public bool IsDriver { get; set; }
+        public bool isCollect { get; set; }
         public bool IsTravelOn { get; set; }
         public string Status { get; set; }
         public string TravelOn { get; set; }
         public int Month { get; set; }
         public int Year { get; set; }
-        public bool isCollect { get; set; }
     }
 }

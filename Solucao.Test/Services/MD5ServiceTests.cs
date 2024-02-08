@@ -5,6 +5,7 @@ namespace Solucao.Tests
 {
     public class MD5ServiceTests
     {
+        
         [Fact]
         public void CompareMD5_MatchingPasswords_ReturnsTrue()
         {

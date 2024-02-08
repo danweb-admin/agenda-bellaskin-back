@@ -22,6 +22,10 @@ namespace Solucao.Application.Data
             ChangeTracker.LazyLoadingEnabled = true;
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<Person> People { get; set; }
         public DbSet<Client> Clients { get; set; }
@@ -33,6 +37,10 @@ namespace Solucao.Application.Data
         public DbSet<Calendar> Calendars { get; set; }
         public DbSet<CalendarSpecifications> CalendarSpecifications { get; set; }
         public DbSet<StickyNote> StickyNotes { get; set; }
+        public DbSet<Model> Models { get; set; }
+        public DbSet<ModelAttributes> ModelAttributes { get; set; }
+        public DbSet<AttributeTypes> AttributeTypes { get; set; }
+        public DbSet<TechnicalAttributes> TechnicalAttributes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -48,7 +56,10 @@ namespace Solucao.Application.Data
             modelBuilder.ApplyConfiguration(new CalendarMapping());
             modelBuilder.ApplyConfiguration(new CalendarSpecificationsMapping());
             modelBuilder.ApplyConfiguration(new StickyNoteMapping());
-
+            modelBuilder.ApplyConfiguration(new ModelMapping());
+            modelBuilder.ApplyConfiguration(new ModelAttribrutesMapping());
+            modelBuilder.ApplyConfiguration(new AttributeTypesMapping());
+            modelBuilder.ApplyConfiguration(new TechnicalAttributesMapping());
 
             // Relationship
             modelBuilder.Entity<State>()

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Solucao.Application.Contracts;
 using Solucao.Application.Data.Entities;
+using Solucao.Application.Data.Interfaces;
 using Solucao.Application.Data.Repositories;
 using Solucao.Application.Service.Interfaces;
 using System;
@@ -14,14 +15,12 @@ namespace Solucao.Application.Service.Implementations
 {
     public class EquipamentService : IEquipamentService
     {
-        private EquipamentRepository equipamentRepository;
-        private EquipamentSpecificationsRepository equipamentSpecificationsRepository;
+        private IEquipamentRepository equipamentRepository;
         private readonly IMapper mapper;
 
-        public EquipamentService(EquipamentRepository _equipamentRepository, EquipamentSpecificationsRepository _equipamentSpecificationsRepository,IMapper _mapper)
+        public EquipamentService(IEquipamentRepository _equipamentRepository,IMapper _mapper)
         {
             equipamentRepository = _equipamentRepository;
-            equipamentSpecificationsRepository = _equipamentSpecificationsRepository;
             mapper = _mapper;
         }
         public async Task<ValidationResult> Add(EquipamentViewModel equipament)

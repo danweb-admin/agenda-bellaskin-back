@@ -10,5 +10,6 @@ namespace Solucao.Application.Service.Interfaces
     public interface ICityService
     {
         Task<ValidationResult> AddIBGECitiesList();
+
     }
 }

@@ -20,6 +20,8 @@ namespace Solucao.Application.AutoMapper
             CreateMap<EquipamentViewModel, Equipament>();
             CreateMap<CalendarViewModel, Calendar>();
             CreateMap<StickyNoteViewModel, StickyNote>();
+            CreateMap<ModelViewModel, Model>();
+            CreateMap<ModelAttributeViewModel, ModelAttributes>();
         }
     }
 }

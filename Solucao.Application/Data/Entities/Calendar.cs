@@ -28,6 +28,9 @@ namespace Solucao.Application.Data.Entities
         public Guid UserId { get; set; }
         public int TravelOn { get; set; }
         public bool ContractMade { get; set; }
+        public decimal Value { get; set; }
+        public int RentalTime { get; set; }
+        public string ContractPath { get; set; }
         public User User { get; set; }
         public Person Technique { get; set; }
         public Person Driver { get; set; }
