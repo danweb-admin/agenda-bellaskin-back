@@ -13,7 +13,6 @@ namespace Solucao.Application.Contracts
         public string ModelFileName { get; set; }
         public Guid EquipamentId { get; set; }
         public EquipamentViewModel Equipament { get; set; }
-        public List<ModelAttributeViewModel> ModelAttributes { get; set; }
 
     }
 }

@@ -27,6 +27,7 @@ namespace Solucao.Application.Data.Entities
         public bool? HasStairs { get; set; }
         public bool? TakeTransformer { get; set; }
         public bool? HasTechnique { get; set; }
+        public bool? HasElevator { get; set; }
         public string TechniqueOption1 { get; set; }
         public string TechniqueOption2 { get; set; }
         public string LandMark { get; set; }

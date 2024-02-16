@@ -24,14 +24,13 @@ namespace Solucao.Application.Service.Implementations
         public async Task<ValidationResult> Add(ModelAttributeViewModel model)
         {
             model.Id = Guid.NewGuid();
-            model.CreatedAt = DateTime.Now;
             var _model = mapper.Map<ModelAttributes>(model);
             return await repository.Add(_model);
         }
 
         public async Task<IEnumerable<ModelAttributeViewModel>> GetAll(Guid modelId)
         {
-            return mapper.Map<IEnumerable<ModelAttributeViewModel>>(await repository.GetAll(modelId));
+            return mapper.Map<IEnumerable<ModelAttributeViewModel>>(await repository.GetAll());
         }
 
         public async Task<ValidationResult> Remove(Guid id)

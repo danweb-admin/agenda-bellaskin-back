@@ -29,6 +29,7 @@ namespace Solucao.Application.Contracts
         public bool? HasAirConditioning { get; set; }
         public bool? Has220V { get; set; }
         public bool? HasStairs { get; set; }
+        public bool? HasElevator { get; set; }
         public bool? TakeTransformer { get; set; }
         public bool? HasTechnique { get; set; }
         public string TechniqueOption1 { get; set; }
@@ -45,7 +46,9 @@ namespace Solucao.Application.Contracts
         public string Rg { get; set; }
         public string Ie { get; set; }
         public string EquipamentValues { get; set; }
-
+        public string DocumentType { get; set; }
+        public string Document { get; set; }
+        public string FullAddress { get; set; }
         public object City { get; set; }
         public object State { get; set; }
     }

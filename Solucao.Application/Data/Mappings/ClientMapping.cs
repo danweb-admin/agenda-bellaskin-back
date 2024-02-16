@@ -94,6 +94,9 @@ namespace Solucao.Application.Data.Mappings
             builder.Property(c => c.HasStairs)
                 .HasColumnType("bit");
 
+            builder.Property(c => c.HasElevator)
+                .HasColumnType("bit");
+
             builder.Property(c => c.TakeTransformer)
                 .HasColumnType("bit");
 

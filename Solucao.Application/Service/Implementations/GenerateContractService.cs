@@ -22,6 +22,7 @@ using Solucao.Application.Data.Repositories;
 using Solucao.Application.Exceptions.Calendar;
 using Solucao.Application.Exceptions.Model;
 using Solucao.Application.Service.Interfaces;
+using Solucao.Application.Utils;
 using Calendar = Solucao.Application.Data.Entities.Calendar;
 
 namespace Solucao.Application.Service.Implementations
@@ -31,14 +32,16 @@ namespace Solucao.Application.Service.Implementations
         private readonly IMapper mapper;
         private readonly CalendarRepository calendarRepository;
         private readonly ModelRepository modelRepository;
+        private readonly ModelAttributesRepository modelAttributesRepository;
         private CultureInfo cultureInfo = new CultureInfo("pt-BR");
 
 
-        public GenerateContractService(IMapper _mapper, CalendarRepository _calendarRepository, ModelRepository _modelRepository)
+        public GenerateContractService(IMapper _mapper, CalendarRepository _calendarRepository, ModelRepository _modelRepository, ModelAttributesRepository _modelAttributesRepository)
 		{
             mapper = _mapper;
             calendarRepository = _calendarRepository;
             modelRepository = _modelRepository;
+            modelAttributesRepository = _modelAttributesRepository;
 		}
 
         public async Task<IEnumerable<CalendarViewModel>> GetAllByDayAndContractMade(DateTime date)
@@ -66,8 +69,11 @@ namespace Solucao.Application.Service.Implementations
             var calendar = mapper.Map<CalendarViewModel>( await calendarRepository.GetById(request.CalendarId));
             calendar.RentalTime = CalculateMinutes(calendar.StartTime.Value, calendar.EndTime.Value);
             SearchCustomerValue(calendar);
+            AdjustCustomerData(calendar);
 
             var model = await modelRepository.GetByEquipament(calendar.EquipamentId);
+
+            var models = await modelAttributesRepository.GetAll();
 
             if (model == null)
                 throw new ModelNotFoundException("Modelo de contrato para esse equipamento não encontrado.");
@@ -76,14 +82,17 @@ namespace Solucao.Application.Service.Implementations
 
             var copiedFile = await CopyFileStream(modelPath, contractPath,model.ModelFileName, contractFileName, calendar.Date);
 
-            var result = ExecuteReplace(copiedFile, model, calendar);
+            var result = ExecuteReplace(copiedFile, models, calendar);
 
             if (result)
             {
                 calendar.ContractPath = copiedFile;
                 calendar.UpdatedAt = DateTime.Now;
                 calendar.ContractMade = true;
-                
+                calendar.Client.ZipCode = Regex.Replace(calendar.Client.ZipCode, @"[^\d]", "");
+                calendar.Client.Phone = Regex.Replace(calendar.Client.Phone, @"[^\d]", "");
+                calendar.Client.ClinicCellPhone = Regex.Replace(calendar.Client.ClinicCellPhone, @"[^\d]", "");
+
                 await calendarRepository.Update(mapper.Map<Calendar>(calendar));
 
                 return ValidationResult.Success;
@@ -124,7 +133,7 @@ namespace Solucao.Application.Service.Implementations
             }
         }
 
-        private bool ExecuteReplace(string copiedFile, Model model, CalendarViewModel calendar)
+        private bool ExecuteReplace(string copiedFile, IEnumerable<ModelAttributes> models, CalendarViewModel calendar)
         {
             try
             {
@@ -134,7 +143,7 @@ namespace Solucao.Application.Service.Implementations
                     using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
                         docText = sr.ReadToEnd();
 
-                    foreach (var item in model.ModelAttributes)
+                    foreach (var item in models)
                     {
                         Regex regexText = new Regex(item.FileAttribute.Trim());
                         var valueItem = GetPropertieValue(calendar, item.TechnicalAttribute, item.AttributeType);
@@ -181,6 +190,8 @@ namespace Solucao.Application.Service.Implementations
                 value = propInfo.GetValue(value);
             }
 
+            if (value == null)
+                value = "";
             // Converter valor para string (assumindo que a propriedade é do tipo string)
             return FormatValue(value.ToString(), attrType);
         }
@@ -196,11 +207,15 @@ namespace Solucao.Application.Service.Implementations
                 case "time":
                     return DateTime.Parse(value).ToString("HH:mm");
                 case "decimal":
-                    return decimal.Parse(value).ToString().Replace(".", ",");
+                    return decimal.Parse(value).ToString("N2", cultureInfo);
                 case "decimal_extenso":
                     return decimalExtenso(value);
                 case "time_extenso":
                     return timeExtenso(value);
+                case "boolean":
+                    if (string.IsNullOrEmpty(value))
+                        return "Não";
+                    return bool.Parse(value) ? "Sim" : "Não";
                 default:
                     return value;
             }
@@ -208,13 +223,14 @@ namespace Solucao.Application.Service.Implementations
 
         private string decimalExtenso(string value)
         {
+            
             var decimalSplit = decimal.Parse(value).ToString("n2").Split('.');
-            var part1 = long.Parse(decimalSplit[0].Replace(",", "")).ToWords(cultureInfo);
-            var part2 = int.Parse(decimalSplit[1]).ToWords(cultureInfo);
+            var part1 = long.Parse(decimalSplit[0].Replace(",", "")).ToWords(cultureInfo).ToTitleCase(TitleCase.All);
+            var part2 = int.Parse(decimalSplit[1]).ToWords(cultureInfo).ToTitleCase(TitleCase.All);
 
-            if (part2 == "zero")
-                return $"{part1} reais";
-            return $"{part1} reais e {part2} centavos";
+            if (part2 == "Zero")
+                return $"{part1} Reais";
+            return $"{part1} Reais e {part2} Centavos";
         }
 
         private string timeExtenso(string value)
@@ -284,6 +300,37 @@ namespace Solucao.Application.Service.Implementations
 
             throw new CalendarNoValueException("Não foi encontrado o valor para a Locação no cadastro do cliente");
             
+        }
+
+        private void AdjustCustomerData(CalendarViewModel calendar)
+        {
+            // Verifica se o locatario possui CPF ou CNPJ
+            if (string.IsNullOrEmpty(calendar.Client.Cnpj))
+            {
+                calendar.Client.DocumentType = "CPF";
+                calendar.Client.Document = string.Format("{0}.{1}.{2}-{3}", calendar.Client.Cpf.Substring(0, 3), calendar.Client.Cpf.Substring(3, 3), calendar.Client.Cpf.Substring(6, 3), calendar.Client.Cpf.Substring(9, 2));
+            }
+            else
+            {
+                calendar.Client.DocumentType = "CNPJ";
+                calendar.Client.Document = string.Format("{0}.{1}.{2}/{3}-{4}", calendar.Client.Cnpj.Substring(0, 2), calendar.Client.Cnpj.Substring(2, 3), calendar.Client.Cnpj.Substring(5, 3), calendar.Client.Cnpj.Substring(8, 4), calendar.Client.Cnpj.Substring(12, 2));
+            }
+
+            // Adiciona o Endereco completo do locatario
+            calendar.Client.FullAddress = $"{calendar.Client.Address}, {calendar.Client.Number} - {calendar.Client.Complement} - {calendar.Client.Neighborhood}";
+
+            // Formata o CEP
+            calendar.Client.ZipCode = $"{calendar.Client.ZipCode.Substring(0, 5)}-{calendar.Client.ZipCode.Substring(5, 3)}";
+
+            
+            // Formata Fixo
+            if (!string.IsNullOrEmpty(calendar.Client.Phone))
+                calendar.Client.Phone = string.Format("({0}) {1}-{2}",calendar.Client.Phone.Substring(0, 2),calendar.Client.Phone.Substring(2, 4),calendar.Client.Phone.Substring(6, 4));
+
+            // Formata Celular
+            if (!string.IsNullOrEmpty(calendar.Client.ClinicCellPhone))
+                calendar.Client.ClinicCellPhone = string.Format("({0}) {1}-{2}",calendar.Client.ClinicCellPhone.Substring(0, 2),calendar.Client.ClinicCellPhone.Substring(2, 5),calendar.Client.ClinicCellPhone.Substring(7, 4));
+
         }
 
         private decimal ValuesBySpecification(CalendarViewModel calendar, string[] hoursValues) { 

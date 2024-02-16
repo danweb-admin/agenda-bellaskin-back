@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Solucao.Application.Data;
 
 namespace Solucao.Application.Migrations
 {
     [DbContext(typeof(SolucaoContext))]
-    partial class SolucaoContextModelSnapshot : ModelSnapshot
+    [Migration("20240215181947_RemocaoModeldoModelAttributes")]
+    partial class RemocaoModeldoModelAttributes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -231,9 +233,6 @@ namespace Solucao.Application.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool?>("HasAirConditioning")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("HasElevator")
                         .HasColumnType("bit");
 
                     b.Property<bool?>("HasStairs")
