@@ -37,6 +37,16 @@ insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) 
 insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('a0a554c5-c159-4ae8-bda3-53065299bebb','#LocatarioEmail', 'Client.Email', 'string')
 insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('8c61c361-decd-446d-a034-924a2a8000a7','#LocatarioEscada', 'Client.HasStairs', 'boolean')
 insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('44e82855-04e9-4039-86f5-e28de962cd7b','#LocatarioArCondicionado', 'Client.HasAirConditioning', 'boolean')
+insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('44e82855-04e9-4039-86f5-e28de962cd7b','#LocatarioElevador', 'Client.HasElevator', 'boolean')
+insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('778444f3-d73d-45c1-9702-6a72d8bac78a','#LocatarioElevador', 'Client.HasElevator', 'boolean')
+insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('8fbe296f-e220-4e6c-981b-1fdd66464ea4','#LocatarioVoltagem', 'Client.Has220V', 'boolean')
+insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('ea18d0ff-2cfa-4074-bbf5-559c9ed02cf9','#ValorFrete', 'Freight', 'decimal')
+insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('1f21e3e8-1c3e-49ab-99ee-0d28221cdd5f','#ValorDesconto', 'Discount', 'decimal')
+insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('d19c997b-ae59-496e-85e3-d5cd4a026579','#ValorTotal', 'Amount', 'decimal')
+insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('c43df523-adde-48f5-aed5-123532f7d6d2','#ValorTotalExtenso', 'Amount', 'decimal_extenso')
+
+
+
 
 
 

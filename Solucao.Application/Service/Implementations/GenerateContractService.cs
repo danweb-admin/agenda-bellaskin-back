@@ -5,11 +5,14 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using Humanizer;
@@ -24,6 +27,9 @@ using Solucao.Application.Exceptions.Model;
 using Solucao.Application.Service.Interfaces;
 using Solucao.Application.Utils;
 using Calendar = Solucao.Application.Data.Entities.Calendar;
+using Table = DocumentFormat.OpenXml.Wordprocessing.Table;
+using TableProperties = DocumentFormat.OpenXml.Wordprocessing.TableProperties;
+using TableRow = DocumentFormat.OpenXml.Wordprocessing.TableRow;
 
 namespace Solucao.Application.Service.Implementations
 {
@@ -84,6 +90,8 @@ namespace Solucao.Application.Service.Implementations
 
             var result = ExecuteReplace(copiedFile, models, calendar);
 
+            CheckDiscountAndFreight(copiedFile, calendar);
+
             if (result)
             {
                 calendar.ContractPath = copiedFile;
@@ -139,6 +147,7 @@ namespace Solucao.Application.Service.Implementations
             {
                 using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(copiedFile, true))
                 {
+                    
                     string docText = null;
                     using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
                         docText = sr.ReadToEnd();
@@ -151,7 +160,10 @@ namespace Solucao.Application.Service.Implementations
                     }
 
                     using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
+                    {
                         sw.Write(docText);
+                        sw.Close();
+                    }
 
                 }
                 return true;
@@ -162,6 +174,36 @@ namespace Solucao.Application.Service.Implementations
                 return false;
             }
             
+        }
+
+        private void CheckDiscountAndFreight(string copiedFile, CalendarViewModel calendar)
+        {
+   
+            using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(copiedFile, true))
+            {
+                TableProperties tableProperties = wordDoc.MainDocumentPart.Document.Descendants<TableProperties>().First(tp => tp.TableCaption != null);
+
+                if (tableProperties == null)
+                    return;
+
+                Table table = (Table)tableProperties.Parent;
+
+                List<TableRow> tableRows = table.Descendants<TableRow>().ToList();
+
+                if (calendar.Freight == 0)
+                    tableRows[3].Remove();
+
+                if (calendar.Discount == 0)
+                    tableRows[4].Remove();
+
+                string docText = null;
+                using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
+                    docText = sr.ReadToEnd();
+
+                using (StreamWriter sw = new StreamWriter(wordDoc.MainDocumentPart.GetStream(FileMode.Create)))
+                    sw.Write(docText);
+
+            }
         }
 
         private string GetPropertieValue(object obj, string propertieName, string attrType)
@@ -330,6 +372,8 @@ namespace Solucao.Application.Service.Implementations
             // Formata Celular
             if (!string.IsNullOrEmpty(calendar.Client.ClinicCellPhone))
                 calendar.Client.ClinicCellPhone = string.Format("({0}) {1}-{2}",calendar.Client.ClinicCellPhone.Substring(0, 2),calendar.Client.ClinicCellPhone.Substring(2, 5),calendar.Client.ClinicCellPhone.Substring(7, 4));
+
+            calendar.Amount = calendar.Value + calendar.Freight - calendar.Discount;
 
         }
 
