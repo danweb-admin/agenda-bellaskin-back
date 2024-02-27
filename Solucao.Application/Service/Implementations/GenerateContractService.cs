@@ -375,6 +375,12 @@ namespace Solucao.Application.Service.Implementations
 
             calendar.Amount = calendar.Value + calendar.Freight - calendar.Discount;
 
+            if (calendar.CalendarSpecifications.Any(x => x.Active))
+            {
+                var specifications = calendar.CalendarSpecifications.Where(x => x.Active);
+                calendar.Specifications = string.Join(',',specifications.Select(x => x.Specification.Name));
+            }
+
         }
 
         private decimal ValuesBySpecification(CalendarViewModel calendar, string[] hoursValues) { 

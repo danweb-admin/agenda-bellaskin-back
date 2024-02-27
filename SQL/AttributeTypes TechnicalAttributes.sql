@@ -44,6 +44,7 @@ insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) 
 insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('1f21e3e8-1c3e-49ab-99ee-0d28221cdd5f','#ValorDesconto', 'Discount', 'decimal')
 insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('d19c997b-ae59-496e-85e3-d5cd4a026579','#ValorTotal', 'Amount', 'decimal')
 insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('c43df523-adde-48f5-aed5-123532f7d6d2','#ValorTotalExtenso', 'Amount', 'decimal_extenso')
+insert into ModelAttributes (id,fileAttribute,technicalAttribute,AttributeType) VALUES ('692dc689-d88d-49d8-af48-c528effb643c','#Ponteiras', 'Specifications', 'string')
 
 
 
