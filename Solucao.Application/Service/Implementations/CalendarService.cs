@@ -59,7 +59,7 @@ namespace Solucao.Application.Service.Implementations
 
             if (string.IsNullOrEmpty(calendar.Status))
                 calendar.Status = "pending";
-            
+
             var _calendar = mapper.Map<Calendar>(calendar);
 
             return calendarRepository.Add(_calendar);

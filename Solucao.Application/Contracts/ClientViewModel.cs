@@ -49,6 +49,8 @@ namespace Solucao.Application.Contracts
         public string DocumentType { get; set; }
         public string Document { get; set; }
         public string FullAddress { get; set; }
+        public decimal Discount { get; set; }
+        public decimal Freight { get; set; }
         public object City { get; set; }
         public object State { get; set; }
     }
