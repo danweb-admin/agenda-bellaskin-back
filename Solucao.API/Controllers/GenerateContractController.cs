@@ -53,6 +53,10 @@ namespace Solucao.API.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (CalendarClientDataException ex)
+            {
+                return BadRequest(ex.Message);
+            }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex);

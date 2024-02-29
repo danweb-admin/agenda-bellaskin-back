@@ -350,11 +350,15 @@ namespace Solucao.Application.Service.Implementations
             if (string.IsNullOrEmpty(calendar.Client.Cnpj))
             {
                 calendar.Client.DocumentType = "CPF";
+                if (string.IsNullOrEmpty(calendar.Client.Cpf))
+                    throw new CalendarClientDataException("CPF do Cliente em branco.");
                 calendar.Client.Document = string.Format("{0}.{1}.{2}-{3}", calendar.Client.Cpf.Substring(0, 3), calendar.Client.Cpf.Substring(3, 3), calendar.Client.Cpf.Substring(6, 3), calendar.Client.Cpf.Substring(9, 2));
             }
             else
             {
                 calendar.Client.DocumentType = "CNPJ";
+                if (string.IsNullOrEmpty(calendar.Client.Cnpj))
+                    throw new CalendarClientDataException("CNPJ do Cliente em branco.");
                 calendar.Client.Document = string.Format("{0}.{1}.{2}/{3}-{4}", calendar.Client.Cnpj.Substring(0, 2), calendar.Client.Cnpj.Substring(2, 3), calendar.Client.Cnpj.Substring(5, 3), calendar.Client.Cnpj.Substring(8, 4), calendar.Client.Cnpj.Substring(12, 2));
             }
 
@@ -362,6 +366,8 @@ namespace Solucao.Application.Service.Implementations
             calendar.Client.FullAddress = $"{calendar.Client.Address}, {calendar.Client.Number} - {calendar.Client.Complement} - {calendar.Client.Neighborhood}";
 
             // Formata o CEP
+            if (string.IsNullOrEmpty(calendar.Client.ZipCode))
+                throw new CalendarClientDataException("CEP do Cliente em branco.");
             calendar.Client.ZipCode = $"{calendar.Client.ZipCode.Substring(0, 5)}-{calendar.Client.ZipCode.Substring(5, 3)}";
 
             
