@@ -178,7 +178,6 @@ namespace Solucao.Application.Service.Implementations
 
         private void CheckDiscountAndFreight(string copiedFile, CalendarViewModel calendar)
         {
-   
             using (WordprocessingDocument wordDoc = WordprocessingDocument.Open(copiedFile, true))
             {
                 TableProperties tableProperties = wordDoc.MainDocumentPart.Document.Descendants<TableProperties>().First(tp => tp.TableCaption != null);
@@ -191,10 +190,10 @@ namespace Solucao.Application.Service.Implementations
                 List<TableRow> tableRows = table.Descendants<TableRow>().ToList();
 
                 if (calendar.Freight == 0)
-                    tableRows[3].Remove();
+                    tableRows[2].Remove();
 
                 if (calendar.Discount == 0)
-                    tableRows[4].Remove();
+                    tableRows[3].Remove();
 
                 string docText = null;
                 using (StreamReader sr = new StreamReader(wordDoc.MainDocumentPart.GetStream()))
