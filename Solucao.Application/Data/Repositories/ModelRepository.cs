@@ -23,7 +23,7 @@ namespace Solucao.Application.Data.Repositories
 
         public async Task<IEnumerable<Model>> GetAll()
         {
-            return await Db.Models.Include(x => x.ModelAttributes).ToListAsync();
+            return await Db.Models.Include(x => x.ModelAttributes).OrderBy(x => x.Name).ToListAsync();
         }
 
         public async Task<Model> GetByEquipament(Guid equipamentId)
