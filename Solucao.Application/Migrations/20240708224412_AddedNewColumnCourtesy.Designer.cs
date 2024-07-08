@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Solucao.Application.Data;
 
 namespace Solucao.Application.Migrations
 {
     [DbContext(typeof(SolucaoContext))]
-    partial class SolucaoContextModelSnapshot : ModelSnapshot
+    [Migration("20240708224412_AddedNewColumnCourtesy")]
+    partial class AddedNewColumnCourtesy
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -63,7 +65,7 @@ namespace Solucao.Application.Migrations
                         .HasColumnType("datetime");
 
                     b.Property<decimal>("Discount")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal");
 
                     b.Property<Guid?>("DriverCollectsId")
                         .HasColumnType("uniqueidentifier");
@@ -78,7 +80,7 @@ namespace Solucao.Application.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Freight")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal");
 
                     b.Property<bool>("NoCadastre")
                         .HasColumnType("bit");
@@ -115,7 +117,7 @@ namespace Solucao.Application.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Value")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal");
 
                     b.HasKey("Id");
 
