@@ -32,12 +32,17 @@ namespace Solucao.Application.Service.Implementations
             return mapper.Map<Task<UserViewModel>>(userRepository.GetById(Id));
         }
 
-        public Task<ValidationResult> Add(User user)
+        public async Task<ValidationResult> Add(User user)
         {
             user.CreatedAt = DateTime.Now;
             user.Password = mD5Service.ReturnMD5(user.Password);
 
-            return userRepository.Add(user);
+            var user_ = await userRepository.GetByName(user.Name);
+
+            if (user_ != null)
+                throw new Exception("Usuário já existe");
+
+            return await userRepository.Add(user);
         }
 
         public async Task<ValidationResult> Update(User user, Guid id)
@@ -53,7 +58,6 @@ namespace Solucao.Application.Service.Implementations
         public async Task<UserViewModel> Authenticate(string email, string password)
         {
             var user = await userRepository.GetByEmail(email);
-            var s = await userRepository.GetAll();
 
             if (user != null)
             {

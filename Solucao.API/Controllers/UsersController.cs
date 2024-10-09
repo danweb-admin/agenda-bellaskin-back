@@ -15,6 +15,9 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Solucao.Application.Contracts.Requests;
+using DocumentFormat.OpenXml.Vml.Spreadsheet;
+using Solucao.Application.Enum;
+using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Solucao.API.Controllers
 {
@@ -24,23 +27,21 @@ namespace Solucao.API.Controllers
     {
         private readonly IUserService userService;
         private readonly TokenService tokenService;
+        private readonly IHistoryService historyService;
         private readonly ILogger<UsersController> logger;
 
         
-        public UsersController(IUserService _userService, TokenService _tokenService, ILogger<UsersController> _logger)
+        public UsersController(IUserService _userService, TokenService _tokenService, ILogger<UsersController> _logger, IHistoryService _historyService)
         {
             userService = _userService;
             tokenService = _tokenService;
+            historyService = _historyService;
             logger = _logger;
         }
 
 
         [HttpGet("user")]
         [Authorize]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(User))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IEnumerable<UserViewModel>> GetAllAsync()
         {
             logger.LogInformation($"{nameof(GetAllAsync)} | Inicio da chamada");
@@ -48,11 +49,7 @@ namespace Solucao.API.Controllers
         }
 
         [HttpPost("user")]
-        [AllowAnonymous]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ValidationResult))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
+        [Authorize]
         public async Task<IActionResult> PostAsync([FromBody] User model)
         {
             logger.LogInformation($"{nameof(PostAsync)} | Inicio da chamada - {model.Email}");
@@ -63,16 +60,15 @@ namespace Solucao.API.Controllers
                 logger.LogWarning($"{nameof(PostAsync)} | Erro na criacao - {model.Email} - {result}");
                 return NotFound(result);
             }
+
+            await historyService.Add(TableEnum.User.ToString(), OperationEnum.Criacao.ToString(), User.Identity.Name, $"UserName: {model.Name},Email: {model.Email}");
+
             return Ok(result);
         }
 
 
         [HttpPut("user/{id}")]
         [Authorize]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ValidationResult))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IActionResult> PutAsync(Guid id, [FromBody] User model)
         {
             logger.LogInformation($"{nameof(PutAsync)} | Inicio da chamada - {model.Email}");
@@ -84,20 +80,17 @@ namespace Solucao.API.Controllers
                 return NotFound(result);
 
             }
+            await historyService.Add(TableEnum.User.ToString(), OperationEnum.Alteracao.ToString(), User.Identity.Name, $"UserId: {id}");
+
             return Ok(result);
             
         }
 
         [HttpPost("user/change-user-password")]
         [AllowAnonymous]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ValidationResult))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IActionResult> ChangeUserPassworAsync([FromBody] ChangeUserPasswordRequest model)
         {
             logger.LogInformation($"{nameof(ChangeUserPassworAsync)} | Inicio da chamada - {model.Email}");
-            // Recupera o usuário
 
             var userAuthenticated = await userService.GetByName(User.Identity.Name);
 
@@ -116,6 +109,8 @@ namespace Solucao.API.Controllers
 
             }
 
+            await historyService.Add(TableEnum.User.ToString(), OperationEnum.Alteracao.ToString(), User.Identity.Name, $"AlteracaoSenha: {model.Email}");
+
             return Ok(await userService.ChangeUserPassword(user,model.Password));
         }
 
@@ -133,8 +128,9 @@ namespace Solucao.API.Controllers
             {
                 logger.LogWarning($"{nameof(Authenticate)} | Erro Autenticacao - {model.Email}");
                 return BadRequest(new ApplicationError { Code = "400", Message = "Senha ou usuário inválido." });
-
             }
+
+            await historyService.Add(TableEnum.User.ToString(), OperationEnum.Logou.ToString(), user.Name, string.Empty);
 
             // Gera o Token
             var token = tokenService.GenerateToken(user);

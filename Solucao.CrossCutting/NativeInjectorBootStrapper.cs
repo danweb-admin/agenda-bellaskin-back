@@ -4,8 +4,6 @@ using Solucao.Application.Data.Interfaces;
 using Solucao.Application.Data.Repositories;
 using Solucao.Application.Service.Implementations;
 using Solucao.Application.Service.Interfaces;
-using System;
-using System.Net.Http;
 
 namespace Solucao.CrossCutting
 {
@@ -29,6 +27,7 @@ namespace Solucao.CrossCutting
             services.AddScoped<IModelAttributesService, ModelAttributesService>();
             services.AddScoped<IModelConfigurationService, ModelConfigurationService>();
             services.AddScoped<IGenerateContractService, GenerateContractService>();
+            services.AddScoped<IHistoryService, HistoryService>();
             services.AddScoped<TokenService>();
 
             // Infra
@@ -46,6 +45,7 @@ namespace Solucao.CrossCutting
             services.AddScoped<ModelAttributesRepository>();
             services.AddScoped<AttributeTypesRepository>();
             services.AddScoped<TechnicalAttributesRepository>();
+            services.AddScoped<HistoryRepository>();
             services.AddScoped<SolucaoContext>();
 
 

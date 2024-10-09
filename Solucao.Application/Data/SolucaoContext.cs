@@ -41,6 +41,7 @@ namespace Solucao.Application.Data
         public DbSet<ModelAttributes> ModelAttributes { get; set; }
         public DbSet<AttributeTypes> AttributeTypes { get; set; }
         public DbSet<TechnicalAttributes> TechnicalAttributes { get; set; }
+        public DbSet<History> Histories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -60,6 +61,7 @@ namespace Solucao.Application.Data
             modelBuilder.ApplyConfiguration(new ModelAttribrutesMapping());
             modelBuilder.ApplyConfiguration(new AttributeTypesMapping());
             modelBuilder.ApplyConfiguration(new TechnicalAttributesMapping());
+            modelBuilder.ApplyConfiguration(new HistoryMapping());
 
             // Relationship
             modelBuilder.Entity<State>()

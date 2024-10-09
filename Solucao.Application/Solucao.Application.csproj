@@ -33,11 +33,15 @@
     <None Remove="Exceptions\" />
     <None Remove="Exceptions\Model\" />
     <None Remove="Exceptions\Calendar\" />
+    <None Remove="Helper\" />
+    <None Remove="Enum\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Contracts\Response\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Exceptions\Model\" />
     <Folder Include="Exceptions\Calendar\" />
+    <Folder Include="Helper\" />
+    <Folder Include="Enum\" />
   </ItemGroup>
 </Project>

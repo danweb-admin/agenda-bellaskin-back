@@ -27,7 +27,7 @@ namespace Solucao.Application.Utils
         {
             throw new NotImplementedException();
         }
-
+        
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
             string message = $"{DateTime.Now} - {logLevel.ToString()}: {eventId.Id} - {formatter(state,exception)}";
