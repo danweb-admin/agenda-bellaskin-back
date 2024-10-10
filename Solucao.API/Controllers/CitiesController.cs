@@ -28,10 +28,6 @@ namespace Solucao.API.Controllers
         }
 
         [HttpGet("cities/add-cities-list")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(City))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<ValidationResult> AddStatesList()
         {
             return await cityService.AddIBGECitiesList();

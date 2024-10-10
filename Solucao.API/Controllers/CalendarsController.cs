@@ -1,18 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Solucao.Application.Contracts;
 using Solucao.Application.Contracts.Requests;
-using Solucao.Application.Data.Entities;
+using Solucao.Application.Enum;
 using Solucao.Application.Service.Interfaces;
-using Solucao.Application.Utils;
-using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Solucao.API.Controllers
@@ -25,19 +21,18 @@ namespace Solucao.API.Controllers
         private readonly ICalendarService calendarService;
         private readonly IUserService userService;
         private readonly ILogger<CalendarsController> logger;
+        private readonly IHistoryService historyService;
 
-        public CalendarsController(ICalendarService _calendarService, IUserService _userService, ILogger<CalendarsController> _logger)
+
+        public CalendarsController(ICalendarService _calendarService, IUserService _userService, ILogger<CalendarsController> _logger, IHistoryService _historyService)
         {
             calendarService = _calendarService;
             userService = _userService;
             logger = _logger;
+            historyService = _historyService;
         }
 
         [HttpGet("calendar")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Calendar))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IEnumerable<EquipamentList>> GetAllAsync([FromQuery] CalendarRequest model)
         {
             logger.LogInformation($"{nameof(CalendarsController)} -{nameof(GetAllAsync)} | Inicio da chamada");
@@ -45,10 +40,6 @@ namespace Solucao.API.Controllers
         }
 
         [HttpGet("calendar/schedules")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Calendar))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IEnumerable<CalendarViewModel>> SchedulesAsync([FromQuery] CalendarRequest model)
         {
             logger.LogInformation($"{nameof(CalendarsController)} -{nameof(SchedulesAsync)} | Inicio da chamada");
@@ -66,10 +57,6 @@ namespace Solucao.API.Controllers
         }
 
         [HttpGet("calendar/availability")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Calendar))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<string> AvailabilityAsync([FromQuery] CalendarRequest model)
         {
             logger.LogInformation($"{nameof(CalendarsController)} -{nameof(AvailabilityAsync)} | Inicio da chamada");
@@ -83,10 +70,6 @@ namespace Solucao.API.Controllers
         }
 
         [HttpPost("calendar")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Calendar))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IActionResult> PostAsync([FromBody] CalendarViewModel model)
         {
             logger.LogInformation($"{nameof(CalendarsController)} - {nameof(PostAsync)} | Inicio da chamada");
@@ -109,14 +92,13 @@ namespace Solucao.API.Controllers
             if (result != null)
                 return NotFound(result);
 
+            await historyService.Add(TableEnum.Calendar.ToString(), OperationEnum.Criacao.ToString(), User.Identity.Name, $"Calendar: Dia: {model.Date.ToShortDateString()}, ClientId: {model.ClientId}");
+
+
             return Ok(result);
         }
 
         [HttpPut("calendar/{id}")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Calendar))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IActionResult> PutAsync([FromBody] CalendarViewModel model)
         {
             ValidationResult result;
@@ -137,14 +119,13 @@ namespace Solucao.API.Controllers
             if (result != null)
                 return NotFound(result);
 
+            await historyService.Add(TableEnum.Calendar.ToString(), OperationEnum.Alteracao.ToString(), User.Identity.Name, $"CalendarId: {model.Id}");
+
+
             return Ok(result);
         }
 
         [HttpPut("calendar/update-driver-or-technique-calendar")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Calendar))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IActionResult> UpdateDriverOrTechniqueCalendarAsync([FromBody] CalendarRequest model)
         {
             ValidationResult result;
@@ -153,14 +134,13 @@ namespace Solucao.API.Controllers
             if (result != null)
                 return NotFound(result);
 
+            await historyService.Add(TableEnum.Calendar.ToString(), OperationEnum.Alteracao.ToString(), User.Identity.Name, $"Mudou motorista/tecnica: {model.CalendarId}");
+
+
             return Ok(result);
         }
 
         [HttpPut("calendar/update-status-or-travel-on-calendar")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Calendar))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IActionResult> UpdateStatusOrTravelOnCalendarAsync([FromBody] CalendarRequest model)
         {
             ValidationResult result;
@@ -169,14 +149,12 @@ namespace Solucao.API.Controllers
             if (result != null)
                 return NotFound(result);
 
+            await historyService.Add(TableEnum.Calendar.ToString(), OperationEnum.Alteracao.ToString(), User.Identity.Name, $"Seguir viagem: {model.CalendarId}");
+
             return Ok(result);
         }
 
         [HttpPut("calendar/update-contract-made")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Calendar))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IActionResult> UpdateContractMadeAsync([FromBody] CalendarRequest model)
         {
             ValidationResult result;
@@ -184,6 +162,8 @@ namespace Solucao.API.Controllers
 
             if (result != null)
                 return NotFound(result);
+
+            await historyService.Add(TableEnum.Calendar.ToString(), OperationEnum.Alteracao.ToString(), User.Identity.Name, $"Contrato Feito: {model.CalendarId}");
 
             return Ok(result);
         }

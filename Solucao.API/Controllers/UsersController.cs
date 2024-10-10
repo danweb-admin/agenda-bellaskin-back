@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Solucao.Application.Utils;
@@ -7,17 +6,11 @@ using Solucao.Application.Contracts;
 using Solucao.Application.Data.Entities;
 using Solucao.Application.Service.Implementations;
 using Solucao.Application.Service.Interfaces;
-using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 using Solucao.Application.Contracts.Requests;
-using DocumentFormat.OpenXml.Vml.Spreadsheet;
 using Solucao.Application.Enum;
-using DocumentFormat.OpenXml.Spreadsheet;
 
 namespace Solucao.API.Controllers
 {

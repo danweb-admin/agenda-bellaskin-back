@@ -28,20 +28,12 @@ namespace Solucao.API.Controllers
         }
 
         [HttpGet("equipaments")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Equipament))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IEnumerable<EquipamentViewModel>> GetAllAsync([FromQuery] EquipamentRequest request)
         {
             return await service.GetAll(request.Ativo);
         }
 
         [HttpPost("equipaments")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ValidationResult))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(ApplicationError))]
         public async Task<IActionResult> PostAsync([FromBody] EquipamentViewModel model)
         {
@@ -55,10 +47,6 @@ namespace Solucao.API.Controllers
 
 
         [HttpPut("equipaments/{id}")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ValidationResult))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IActionResult> PutAsync(string id, [FromBody] EquipamentViewModel model)
         {
             var result = await service.Update(model);

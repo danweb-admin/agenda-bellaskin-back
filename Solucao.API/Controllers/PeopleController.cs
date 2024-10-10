@@ -30,31 +30,18 @@ namespace Solucao.API.Controllers
         }
 
         [HttpGet("people")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Person))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IEnumerable<PersonViewModel>> GetAllAsync([FromQuery] PersonRequest personRequest)
         {
             return await personService.GetAll(personRequest.Ativo, personRequest.TipoPessoa);
         }
 
         [HttpGet("people/get-by-name")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Person))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IEnumerable<PersonViewModel>> GetByNameAsync([FromQuery] PersonRequest personRequest)
         {
             return await personService.GetAll(personRequest.Ativo, personRequest.TipoPessoa);
         }
 
         [HttpPost("people")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ValidationResult))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(ApplicationError))]
         public async Task<IActionResult> PostAsync([FromBody] PersonViewModel model)
         {
             var result = await personService.Add(model);
@@ -66,10 +53,6 @@ namespace Solucao.API.Controllers
 
 
         [HttpPut("people/{id}")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ValidationResult))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IActionResult> PutAsync(string id, [FromBody] PersonViewModel model)
         {
             var result = await personService.Update(model);

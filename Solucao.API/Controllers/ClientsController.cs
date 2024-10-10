@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Solucao.Application.Contracts;
 using Solucao.Application.Contracts.Requests;
-using Solucao.Application.Data.Entities;
+using Solucao.Application.Enum;
 using Solucao.Application.Service.Interfaces;
 using Solucao.Application.Utils;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -22,17 +18,16 @@ namespace Solucao.API.Controllers
     public class ClientsController : ControllerBase
     {
         private readonly IClientService clientService;
+        private readonly IHistoryService historyService;
 
-        public ClientsController(IClientService _clientService)
+
+        public ClientsController(IClientService _clientService, IHistoryService _historyService)
         {
             clientService = _clientService;
+            historyService = _historyService;
         }
 
         [HttpGet("client")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(Client))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IEnumerable<ClientViewModel>> GetAllAsync([FromQuery] ClientRequest clientRequest)
         {
             return await clientService.GetAll(clientRequest.Ativo,clientRequest.Search);
@@ -40,10 +35,6 @@ namespace Solucao.API.Controllers
 
 
         [HttpPost("client")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ValidationResult))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         [SwaggerResponse((int)HttpStatusCode.InternalServerError, Type = typeof(ApplicationError))]
         public async Task<IActionResult> PostAsync([FromBody] ClientViewModel model)
         {
@@ -51,21 +42,24 @@ namespace Solucao.API.Controllers
 
             if (result != null)
                 return NotFound(result);
+
+            await historyService.Add(TableEnum.Client.ToString(), OperationEnum.Criacao.ToString(), User.Identity.Name, $"Client: Nome: {model.Name}, Endereco: {model.Address}");
+
             return Ok(result);
         }
 
 
         [HttpPut("client/{id}")]
-        [SwaggerResponse((int)HttpStatusCode.OK, Type = typeof(ValidationResult))]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, Type = typeof(ApplicationError))]
-        [SwaggerResponse((int)HttpStatusCode.NotFound, Type = typeof(ApplicationError))]
         public async Task<IActionResult> PutAsync(string id, [FromBody] ClientViewModel model)
         {
             var result = await clientService.Update(model);
 
             if (result != null)
                 return NotFound(result);
+
+            await historyService.Add(TableEnum.Client.ToString(), OperationEnum.Alteracao.ToString(), User.Identity.Name, $"Client: Nome: {model.Name}, Endereco: {model.Address}");
+
+
             return Ok(result);
         }
     }
