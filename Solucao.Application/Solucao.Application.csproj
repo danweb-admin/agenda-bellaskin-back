@@ -35,6 +35,7 @@
     <None Remove="Exceptions\Calendar\" />
     <None Remove="Helper\" />
     <None Remove="Enum\" />
+    <None Remove="Data\Results\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Contracts\Response\" />
@@ -43,5 +44,6 @@
     <Folder Include="Exceptions\Calendar\" />
     <Folder Include="Helper\" />
     <Folder Include="Enum\" />
+    <Folder Include="Data\Results\" />
   </ItemGroup>
 </Project>
