@@ -25,7 +25,26 @@ namespace Solucao.Application.Data.Repositories
 
         public virtual async Task<IEnumerable<Equipament>> GetAll(bool ativo)
         {
-            return await Db.Equipaments.Include(x => x.EquipamentSpecifications).Where(x => x.Active == ativo).OrderBy(x => x.Order).ToListAsync();
+           var list = await Db.Equipaments.Select(e => new Equipament
+           {
+               Id = e.Id,
+               Name = e.Name,
+               Active = e.Active,
+               Order = e.Order,
+               EquipamentSpecifications = e.EquipamentSpecifications.Select(es => new EquipamentSpecifications
+               {
+                   Id = es.Id,
+                   Name = es.Specification.Name,
+                   Specification = es.Specification,
+                   Active = es.Active,
+                   EquipamentId = es.EquipamentId,
+                   SpecificationId = es.SpecificationId
+                   
+               }).ToList()
+           }).ToListAsync();         
+
+
+            return list;
         }
 
         public virtual async Task<IEnumerable<Equipament>> GetListById(List<Guid> guids)
