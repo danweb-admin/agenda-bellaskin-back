@@ -41,7 +41,7 @@ namespace Solucao.Application.Data.Repositories
                    SpecificationId = es.SpecificationId
                    
                }).ToList()
-           }).ToListAsync();         
+           }).OrderBy(x => x.Order).ToListAsync();         
 
 
             return list;
