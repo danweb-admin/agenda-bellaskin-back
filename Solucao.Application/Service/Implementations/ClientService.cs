@@ -37,7 +37,7 @@ namespace Solucao.Application.Service.Implementations
             return mapper.Map<IEnumerable<ClientViewModel>>(await clientRepository.GetAll(ativo,search));
         }
 
-        public Task<ClientViewModel> GetById(string Id)
+        public Task<ClientViewModel> GetById(Guid Id)
         {
             return mapper.Map<Task<ClientViewModel>>(clientRepository.GetById(Id));
         }

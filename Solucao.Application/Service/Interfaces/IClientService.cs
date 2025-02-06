@@ -12,7 +12,7 @@ namespace Solucao.Application.Service.Interfaces
     {
         Task<IEnumerable<ClientViewModel>> GetAll(bool ativo, string search);
 
-        Task<ClientViewModel> GetById(string Id);
+        Task<ClientViewModel> GetById(Guid Id);
 
         Task<ValidationResult> Add(ClientViewModel client);
 
