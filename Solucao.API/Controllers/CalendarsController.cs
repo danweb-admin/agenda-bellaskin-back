@@ -72,6 +72,8 @@ namespace Solucao.API.Controllers
         [HttpPost("calendar")]
         public async Task<IActionResult> PostAsync([FromBody] CalendarViewModel model)
         {
+          try
+          {
             logger.LogInformation($"{nameof(CalendarsController)} - {nameof(PostAsync)} | Inicio da chamada");
             ValidationResult result;
             result = await calendarService.ValidateLease(model.Date, model.ClientId, model.EquipamentId, model.CalendarSpecifications, model.StartTime1, model.EndTime1);
@@ -96,6 +98,13 @@ namespace Solucao.API.Controllers
 
 
             return Ok(result);
+          }
+          catch (Exception ex)
+          {
+            Console.WriteLine(ex);
+            throw;
+          }
+            
         }
 
         [HttpPut("calendar/{id}")]
