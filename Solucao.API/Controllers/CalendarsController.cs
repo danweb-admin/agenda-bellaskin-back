@@ -92,7 +92,7 @@ namespace Solucao.API.Controllers
             if (result != null)
                 return NotFound(result);
 
-            await historyService.Add(TableEnum.Calendar.ToString(), OperationEnum.Criacao.ToString(), User.Identity.Name, $"Calendar: Dia: {model.Date.ToShortDateString()}, ClientId: {model.ClientId}");
+            //await historyService.Add(TableEnum.Calendar.ToString(), OperationEnum.Criacao.ToString(), User.Identity.Name, $"Calendar: Dia: {model.Date.ToShortDateString()}, ClientId: {model.ClientId}");
 
 
             return Ok(result);
