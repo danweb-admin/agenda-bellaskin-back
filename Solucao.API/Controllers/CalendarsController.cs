@@ -52,6 +52,8 @@ namespace Solucao.API.Controllers
             if (!string.IsNullOrEmpty(model.EquipamentList))
                 equipamentIds = model.EquipamentList.Split(',').Select(Guid.Parse).ToList();
 
+            if (model.EquipamentId.HasValue)
+                equipamentIds = new List<Guid> { model.EquipamentId.Value};
 
             return await calendarService.Schedules(model.StartDate, model.EndDate, model.ClientId, equipamentIds, list, model.TechniqueId, model.Status);
         }
